@@ -1,522 +1,128 @@
-# 🧠 Código TFM — Quantum Data Encoding & Hybrid Autoencoders
+# Quantum Data Encoding for Image Reconstruction
 
-## 🚨 PRIMERO DE TODO: METERSE EN LA RAMA `develop`
+Repository containing the Python code developed for a master's thesis on image compression and reconstruction using hybrid quantum-classical autoencoders, and subsequently used in the research work comparing different quantum data encoding strategies.
 
-Sí, lo digo antes que nada porque luego vienen los disgustos.
+## Overview
 
----
+The project investigates the performance of five quantum data encoding strategies in a hybrid quantum-classical autoencoder framework:
 
-## 📌 ¿Qué es esto?
-
-Este repositorio contiene el código utilizado durante mi TFM:
-
-> **Comparación de diferentes técnicas de data encoding para compresión y reconstrucción de imágenes mediante autoencoders híbridos.**
-
-La idea general del proyecto era comparar diferentes técnicas de **quantum data encoding** dentro de un autoencoder híbrido, manteniendo el resto del experimento lo más controlado posible.
-
-Las técnicas utilizadas fueron:
-
-- **Amplitude Encoding**
 - **Angle Encoding**
+- **Amplitude Encoding**
 - **Dense Angle Encoding**
 - **Basis Encoding**
 - **Single Qubit Encoding**
 
-Y sí, todo esto acabó convertido en una cantidad bastante considerable de archivos `.py`.
+The experiments evaluate the encoding strategies in the context of image reconstruction, considering reconstruction quality, computational cost and qubit requirements.
 
----
+The repository contains the main experiment scripts, quantum circuit implementations, data preparation utilities, parameter configurations and result visualisation scripts.
 
-## ⚠️ Aviso importante antes de entrar
+## Repository status and limitations
 
-Espero sinceramente que **nadie tenga que trabajar nunca sobre este proyecto** XD.
+**Important:** The codebase is provided in its original research and development state and has not undergone a complete refactoring or systematic cleanup.
 
-No porque no funcione, sino porque la distribución del código es actualmente "complicada".
+As a result, the repository includes experimental scripts, legacy implementations and auxiliary files that may not be required for the main experiments. Code organisation and inline documentation are also limited in some areas.
 
-El código está bastante caótico, hay archivos de pruebas por todas partes y, para añadir más emoción, **prácticamente no hay comentarios**.  
-Me hubiera gustado dejarlo bastante más limpio y organizado, pero sinceramente **no me ha dado la vida**. XD
+The descriptions in this README are intended to help navigate the codebase and identify the main components. They should not be interpreted as a guarantee that every file is currently used or that the complete experimental pipeline can be reproduced without additional configuration.
 
-Así que este README existe principalmente para:
+The code reflects the implementation used during the research process. Users intending to reuse or extend it should inspect the relevant scripts and verify their behaviour before making modifications or drawing conclusions from new executions.
 
-1. Evitar que alguien tarde 3 días en encontrar el archivo que necesita.
-2. Explicar, más o menos, qué hace cada cosa.
-3. Dejar una pequeña guía para mi yo del futuro.
-4. Permitir que alguien pueda coger "inspiración" de lo que hice en su momento.
-5. Evitar que alguien abra `Circuito.py` y abandone inmediatamente la informática.
+## Repository structure
 
----
+Most of the relevant implementation is located in the `Terceras pruebas/` directory.
 
-# 📂 ¿Dónde está lo importante?
+The following sections describe the main files and their intended roles, based on the current understanding of the codebase.
 
-La carpeta que realmente importa es:
+### Core implementation
 
-```text
-Terceras pruebas/
-```
+| File | Description |
+|---|---|
+| `Circuito.py` | Contains the principal quantum circuit implementations and encoding-related functions, including custom implementations of Dense Angle Encoding and Single Qubit Encoding. It also includes auxiliary quantum-state and circuit operations. |
+| `Funciones_estado.py` | Provides functions for quantum-state manipulation, pixel-block processing, data normalisation, autoencoder initialisation, loss computation, training support, result storage and visualisation. It acts as a central interface between the experiment scripts and the circuit implementations. |
+| `Inicializa_params.py` | Initialises the parameters used throughout the experiments, including qubit counts, circuit layers, learning rates, block sizes, encoding parameters and optimiser settings. |
+| `Generador_datos.py` | Contains utilities for generating and preparing the datasets used in the experiments. |
 
-Sí, el nombre podría ser muchísimo mejor.
+### Experiment execution
 
-No lo es.
+The following scripts implement the main experimental workflows for the different encoding strategies.
 
-Dentro de esta carpeta hay una **barbaridad de archivos `.py`**. A continuación intento explicar qué hace cada uno.
+| File | Description |
+|---|---|
+| `mainAmplitude_DenseAutoencoder.py` | Implements the experimental workflow for Amplitude Encoding and Dense Angle Encoding. The encoding strategy is selected through a configuration parameter. |
+| `mainAngle_BasisAutoencoder.py` | Implements the corresponding workflow for Angle Encoding and Basis Encoding. |
+| `mainSQOriginal.py` | Implements the workflow for Single Qubit Encoding. |
+| `Main.py` | Contains additional experiment execution code. |
+| `main_prueba.py` | Contains supplementary experimental code and tests. |
 
-Digo *intento* porque algunos de estos archivos los escribí hace bastante tiempo y ahora mismo mi memoria sobre ellos es aproximadamente:
+The main workflows generally involve data loading, parameter initialisation, image-block preparation, circuit configuration, training, development-set evaluation, testing and result storage.
 
-> "Sé que esto era importante para algo."
+The exact execution procedure and configuration requirements should be checked in the corresponding scripts before attempting to reproduce an experiment.
 
----
+### Results and visualisation
 
-# 🗂️ Archivos
+| File | Description |
+|---|---|
+| `Grafico.py` | Generates the scatter plot used to present the best results in the research article. |
+| `Graficador.py` | Contains an earlier plotting implementation that is not considered part of the main workflow. |
 
-## `Archivador.py`
+### Auxiliary and legacy files
 
-Creo que no se utiliza actualmente.
+| File | Description |
+|---|---|
+| `Archivador.py` | Earlier utility for organising directories, files and experimental results. Its current use has not been confirmed. |
+| `Autoencoder.py` | Preliminary implementation used during the initial exploration of autoencoders. It is not required by the final experimental workflows, according to the current project notes. |
+| `Paralelizador.py` | Experimental attempt to execute two autoencoders in parallel. It may provide a starting point for further investigation into parallel execution, but its behaviour should be verified. |
+| `phase-field-compr` | Auxiliary code associated with an exploratory experiment using phase-field data. |
+| `read_sim_data_for_training.py` | Script associated with the preparation or reading of simulation data for the phase-field experiment. |
 
-Lo utilicé en su momento para gestionar carpetas y organizar archivos/resultados.
+The repository also contains a Jupyter notebook and additional scripts, tests and intermediate files generated throughout development. These are retained as part of the original project history and should not automatically be considered necessary for the main experiments.
 
-Probablemente se puede ignorar sin miedo.
+## General experimental workflow
 
----
+The main experimental pipeline can be summarised as follows:
 
-## `Autoencoder.py`
+1. **Data preparation:** load and prepare the image datasets.
+2. **Parameter initialisation:** configure the encoding strategy, quantum circuit and training parameters.
+3. **Image processing:** divide images into blocks and prepare the corresponding inputs.
+4. **Quantum processing:** encode the input data and execute the encoder and decoder circuits.
+5. **Training and evaluation:** train the hybrid autoencoder and evaluate its reconstruction performance.
+6. **Testing and result storage:** execute the test workflow and save the relevant outputs for subsequent analysis.
 
-Tampoco se utiliza en los experimentos finales.
+The quantum circuit implementations and state-processing functions are primarily located in `Circuito.py` and `Funciones_estado.py`, respectively. The experiment-specific scripts coordinate the execution of the pipeline.
 
-Fue una de las primeras pruebas que hice para entender cómo funcionaba un autoencoder.
+## Recommended starting point
 
-Básicamente:
+For users wishing to explore the implementation, the following reading order is recommended:
 
-> **Yo intentando entender qué estaba haciendo.**
+1. `Generador_datos.py` — understand data preparation.
+2. `Inicializa_params.py` — inspect the experiment configuration.
+3. One of the `main*.py` scripts — follow the execution workflow for a specific encoding strategy.
+4. `Funciones_estado.py` — examine the data-processing and autoencoder support functions.
+5. `Circuito.py` — investigate the underlying quantum circuits and encoding implementations.
+6. `Grafico.py` — inspect the generation of the article's result visualisation.
 
-No es necesario para reproducir los experimentos finales.
+This order provides an overview of the experimental pipeline before introducing the lower-level circuit details.
 
----
+## Branch information
 
-## `Circuito.py` ⭐
+The `develop` branch has historically been used as the working branch for this project.
 
-### Probablemente el archivo más importante de todo el proyecto.
+Before inspecting or modifying the repository, check the available branches and their current state. If continuing the original development workflow, use `develop` where appropriate and verify that it contains the intended version of the code.
 
-Aquí está centralizada prácticamente toda la parte relacionada con los **circuitos cuánticos** y con las partes más puramente cuánticas del autoencoder y del encoding.
+## Reproducibility and further development
 
-Al principio del archivo están las implementaciones de:
+This repository documents the implementation developed during the research process. Because the code has not been fully refactored, additional work may be required to reproduce the experiments or adapt the implementation to a different environment.
 
-- **Dense Angle Encoding**
-- **Single Qubit Encoding**
+In particular, users should verify:
 
-Estas dos técnicas no están disponibles directamente como técnicas de encoding predeterminadas en PennyLane, por lo que tuve que implementarlas.
+- The Python environment and required package versions.
+- The availability and expected directory structure of the datasets.
+- The configuration parameters used by each experiment.
+- The relationship between the execution scripts and their auxiliary modules.
+- The paths and configuration required to save and analyse results.
 
-Después aparecen otras funciones auxiliares. Algunas no se utilizan directamente en los flujos principales, pero pueden resultar interesantes. Por ejemplo:
+A complete environment specification and a fully automated reproduction procedure are not currently documented in this README.
 
-- `SWAP_Test`
-- otras funciones relacionadas con estados y circuitos cuánticos.
+## Citation
 
-### ¿Cómo funciona el flujo principal?
+If you use this code in your research, please cite the associated research article once its final bibliographic information is available.
 
-Las funciones principales siguen, de forma general, este esquema:
-
-```text
-Imagen / bloque de píxeles
-        ↓
-Quantum Data Encoding
-        ↓
-Encoder
-        ↓
-Latent / Trash
-        ↓
-Decoder
-        ↓
-Medición
-        ↓
-Reconstrucción
-```
-
-Al comienzo de las funciones principales se indica mediante un parámetro qué **ansatz** se utiliza.
-
-Actualmente el principal es:
-
-```text
-StronglyEntanglingLayers
-```
-
-Después, dependiendo de la función utilizada, se aplica la técnica de encoding correspondiente.
-
-A continuación se ejecuta:
-
-1. El **encoder**.
-2. El **decoder**.
-3. La medición correspondiente.
-4. La reconstrucción del bloque.
-
-Una de las cosas importantes de este archivo es tener claro **cómo evoluciona la información a través de los wires**.
-
-Especialmente:
-
-- qué qubits contienen la información útil,
-- cuáles corresponden a la parte **latent**,
-- cuáles corresponden a la parte **trash**,
-- cómo se aplica el encoder,
-- cómo se reconstruye la información mediante el decoder,
-- y cómo se realiza finalmente la medición.
-
-Esta parte es bastante compleja de explicar únicamente en un README.
-
-Si alguien necesita entenderla en profundidad:
-
-> **ChatGPT probablemente pueda ayudar con el código. XD**
-
----
-
-# `Funciones_estado.py` ⭐
-
-Otro de los archivos **muy importantes**.
-
-Este archivo contiene todas las funciones relacionadas con la manipulación de los **estados cuánticos** durante el flujo del autoencoder, además de bastantes funciones auxiliares.
-
-Podría considerarse una especie de **puente entre los scripts principales de ejecución y `Circuito.py`**.
-
-Aquí aparecen funciones relacionadas con:
-
-- Normalización de datos.
-- Tratamiento de los bloques de píxeles.
-- Procesamiento de los bloques antes del autoencoder.
-- Procesamiento de los bloques después del autoencoder.
-- Guardado de resultados.
-- Generación de gráficas.
-- Inicialización de los autoencoders.
-- Funciones puente para ejecutar los autoencoders.
-- Aplicación de las funciones de pérdida.
-- Manipulación de estados cuánticos.
-- Otras funciones auxiliares necesarias durante el entrenamiento.
-
-Hay **muchísimas funciones** y, a diferencia de otros archivos, la mayoría sí tienen alguna función importante dentro del flujo.
-
-Por eso:
-
-> ⚠️ **Si vas a modificar algo del funcionamiento interno, este archivo merece ser analizado con calma.**
-
-No recomiendo abrirlo a las 3 de la mañana intentando entenderlo.
-
----
-
-# `Generador_datos.py`
-
-Se utiliza para generar y preparar los datasets necesarios antes de comenzar las ejecuciones.
-
-Entre otras cosas, realiza las divisiones y organización de los datos necesarias para poder utilizarlos posteriormente en los circuitos.
-
-No es especialmente necesario analizarlo para entender el funcionamiento del autoencoder.
-
-Eso sí:
-
-> Para utilizar correctamente un dataset dentro de los circuitos cuánticos, este archivo forma parte del flujo de preparación de datos.
-
----
-
-# `Graficador.py`
-
-Lo utilicé en su momento para generar algún gráfico.
-
-Actualmente es **descartable**.
-
-Si alguien lo necesita, ahí está.
-
-Si no:
-
-> 🗑️ *Que descanse.*
-
----
-
-# `Grafico.py`
-
-Este sí tiene una función concreta.
-
-Se utiliza para generar el **gráfico de puntos que aparece en el artículo con los mejores resultados**.
-
-Si estás buscando cómo se generó esa figura concreta del paper, probablemente este sea el archivo que quieres.
-
----
-
-# `Inicializa_params.py`
-
-Aquí se inicializan los diferentes parámetros utilizados durante los experimentos.
-
-Principalmente cosas como:
-
-- Número de capas.
-- Número de qubits.
-- Learning rates.
-- Tamaño de los bloques.
-- Parámetros de las técnicas de encoding.
-- Parámetros de los optimizadores.
-- Etc.
-
-En general, este archivo sirve para darle **forma y estructura al proceso de optimización** y evitar tener todos estos valores desperdigados por los scripts.
-
-Si quieres cambiar hiperparámetros de los experimentos:
-
-> **Mira aquí primero.**
-
----
-
-# 📓 El notebook
-
-El notebook es...
-
-> **un trabajo del máster.**
-
-No hay mucho más que decir. JAJAJA.
-
-Está ahí por motivos históricos y porque en algún momento pensé:
-
-> "Voy a hacer esto en un notebook."
-
-Y efectivamente lo hice.
-
----
-
-# 🧪 `Main.py` y `main_prueba.py`
-
-Aquí está la **sala de experimentos**.
-
-Estos archivos contienen la ejecución de los diferentes autoencoders y permiten realizar los experimentos modificando los hiperparámetros.
-
-Aquí se realizan las ejecuciones de las diferentes técnicas de encoding.
-
-Para ejecutar las cinco técnicas hay que ejecutar las funciones correspondientes, modificando algunas variables según el experimento.
-
-No es probablemente la parte más elegante del proyecto, pero es donde ocurre la magia.
-
-O algo parecido a la magia.
-
----
-
-# ⚛️ `mainAmplitude_DenseAutoencoder.py`
-
-Este archivo contiene el flujo completo de ejecución del autoencoder para:
-
-- **Amplitude Encoding**
-- **Dense Angle Encoding**
-
-Ambos están juntos porque utilizan el mismo número de qubits.
-
-El flujo general es:
-
-```text
-Carga de datos
-      ↓
-Inicialización de parámetros
-      ↓
-Preparación de bloques 2×2
-      ↓
-Inicialización del circuito
-      ↓
-Entrenamiento
-      ↓
-Dev
-      ↓
-Test
-      ↓
-Guardado de resultados
-```
-
-Al principio se cargan los datos y se inicializan los parámetros relacionados con:
-
-- los bloques de píxeles,
-- el circuito cuántico,
-- el entrenamiento,
-- etc.
-
-Después comienza el entrenamiento, procesando los diferentes bloques de imágenes.
-
-Más adelante se realiza el proceso correspondiente al **dev set**.
-
-Finalmente:
-
-> **se ejecuta el test y se guardan los resultados necesarios.**
-
-### ¿Cómo se diferencia Amplitude de Dense Angle?
-
-Mediante un parámetro de entrada.
-
-Dependiendo de su valor, se ejecuta una técnica u otra.
-
-Sí, está implementado como un `string`.
-
-No sé por qué.
-
----
-
-# 📐 `mainAngle_BasisAutoencoder.py`
-
-Exactamente la misma filosofía que el archivo anterior, pero esta vez para:
-
-- **Angle Encoding**
-- **Basis Encoding**
-
-El flujo general es equivalente:
-
-```text
-Datos
- ↓
-Parámetros
- ↓
-Bloques
- ↓
-Encoding
- ↓
-Encoder
- ↓
-Decoder
- ↓
-Dev
- ↓
-Test
- ↓
-Resultados
-```
-
----
-
-# 1️⃣ `mainSQOriginal.py`
-
-Lo mismo que los anteriores, pero exclusivamente para:
-
-> **Single Qubit Encoding**
-
-Es decir, un script separado porque aquí el número de qubits y el flujo correspondiente son diferentes.
-
----
-
-# 🧵 `Paralelizador.py`
-
-Este archivo fue un intento de ejecutar **dos autoencoders en paralelo**.
-
-La idea original fue de **Hodei**.
-
-Que conste.
-
-La culpa fue suya. XD
-
-No funcionaba del todo bien, pero el código puede servir como una **base interesante para intentar paralelizar las ejecuciones** en el futuro.
-
-Si alguien quiere intentar mejorar el tiempo de ejecución:
-
-> Igual merece la pena echarle un ojo.
-
----
-
-# 🌊 `phase-field-compr` y `read_sim_data_for_training.py`
-
-Estos archivos están relacionados con los datos de **phase field** de Eider.
-
-Los utilicé para hacer una pequeña prueba con ese dataset.
-
-La prueba funciona, por lo que estos archivos pueden servir como punto de partida si en algún momento se quieren utilizar esos datos de nuevo.
-
----
-
-# 🧹 ¿Y el resto de archivos?
-
-Aquí viene la parte fácil.
-
-Si un archivo **no aparece explicado en este README**, probablemente sea:
-
-- una prueba inicial,
-- un experimento que hice y luego abandoné,
-- una versión antigua de algo,
-- un script auxiliar que ya no utilizo,
-- o simplemente resultados que guardé en local.
-
-En principio:
-
-> **Se puede descartar todo eso.**
-
-No debería ser necesario para reproducir los experimentos principales.
-
----
-
-# 🧭 Resumen rápido para no perderse
-
-Si acabas de entrar al proyecto y no sabes por dónde empezar:
-
-```text
-                 ┌──────────────────┐
-                 │ Generador_datos  │
-                 └────────┬─────────┘
-                          ↓
-                 ┌──────────────────┐
-                 │Inicializa_params │
-                 └────────┬─────────┘
-                          ↓
-             ┌──────────────────────────┐
-             │       MAIN / MAINs       │
-             │   Sala de experimentos   │
-             └────────────┬─────────────┘
-                          ↓
-              ┌────────────────────────┐
-              │   Funciones_estado.py  │
-              │    Puente principal    │
-              └───────────┬────────────┘
-                          ↓
-                ┌──────────────────┐
-                │    Circuito.py   │
-                │  Parte cuántica  │
-                └────────┬─────────┘
-                         ↓
-                  ┌─────────────┐
-                  │ Autoencoder │
-                  └─────────────┘
-```
-
-Y si solo quieres saber **qué archivos mirar**, sería aproximadamente:
-
-### ⭐ MUY IMPORTANTES
-
-- `Circuito.py`
-- `Funciones_estado.py`
-- `Inicializa_params.py`
-- `Generador_datos.py`
-- `mainAmplitude_DenseAutoencoder.py`
-- `mainAngle_BasisAutoencoder.py`
-- `mainSQOriginal.py`
-
-### 🟡 ÚTILES
-
-- `Main.py`
-- `main_prueba.py`
-- `Grafico.py`
-- `Paralelizador.py`
-
-### 🗑️ PROBABLEMENTE DESCARTABLES
-
-- `Archivador.py`
-- `Autoencoder.py`
-- `Graficador.py`
-- El resto de scripts de pruebas/resultados antiguos.
-
----
-
-# ❤️ Últimas palabras
-
-Si has llegado hasta aquí:
-
-**enhorabuena.**
-
-Ya sabes aproximadamente dónde está cada cosa y, con suerte, te he ahorrado bastante tiempo buscando archivos.
-
-El código no está precisamente en su estado más bonito, pero **es el código que se utilizó para sacar adelante el TFM y realizar los experimentos del artículo**.
-
-Así que si alguien quiere reutilizarlo, modificarlo o simplemente cotillearlo:
-
-> **Buena suerte.**
-
-Y si encuentras algo que no tiene ningún sentido:
-
-> **probablemente tampoco lo tenía cuando lo escribí.**
-
-Pero si consigues sacar algo útil de él, entonces todo este caos habrá servido para algo. 😎
-
-**PD:** Si vas a tocar algo importante, hazlo en `develop`.
-
-En serio.
-
-# PRIMERO DE TODO: METERSE EN `develop`.
