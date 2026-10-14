@@ -1,0 +1,9 @@
+
+
+
+------------- TIEMPOS DE EJECUCION POR APARTADO -------------
+Tiempo total de la ejecucion: 73769.25276446342
+Tiempo preprocesado de información antes de entrenamiento: 21.30592370033264
+Tiempo entrenamiento: 59671.33938455582
+Tiempo reconstruccion: 14076.59268951416
+Tiempo analisis con graficos mas guardado de logs: 0.8253803253173828

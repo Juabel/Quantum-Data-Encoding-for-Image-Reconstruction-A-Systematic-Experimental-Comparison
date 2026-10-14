@@ -1,0 +1,21 @@
+
+
+
+------------- HIPERPARAMETROS -------------
+Resize dimension: (100, 100)
+Compressed dimension: (50, 100)
+Tamano de bloques: 2x2
+Numero de qubits total: 2
+Tecnica de encoding: Single Qubit
+Tipo de imagenes: SAR
+Numero de imagenes total Train: 400
+Numero de imagenes total Test: 100
+Ansatz usado: StronglyEntangling
+-------------  -------------
+Número de epochs 20
+Tasa de aprendizaje: 0.01
+Número de capas del decoder: 6
+------------- METRICAS -------------
+
+MSE medio global de la imagen: 0.005901
+SSIM medio de las imagenes: 0.835381
